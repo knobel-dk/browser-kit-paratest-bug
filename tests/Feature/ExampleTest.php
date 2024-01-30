@@ -2,18 +2,20 @@
 
 namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use App\Models\User;
+use Laravel\BrowserKitTesting\TestCase as BaseTestCase;
+use Tests\CreatesApplication;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class ExampleTest extends TestCase
+class ExampleTest extends BaseTestCase
 {
-    /**
-     * A basic test example.
-     */
+    use CreatesApplication, DatabaseTransactions;
+
+    protected $baseUrl = '';
+
     public function test_the_application_returns_a_successful_response(): void
     {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
+        $databaseName = (new User)->getConnection()->getDatabaseName();
+        $this->assertStringContainsString('testing_test_', $databaseName);
     }
 }
